@@ -1,0 +1,48 @@
+#include<stdio.h>
+#include<math.h>
+double f(double x)
+{
+	return x*x-4;
+}
+
+double f_prime(double x)
+{
+	return 2*x;
+}
+double newton_raphson(double x0,double tolerance,int max_iterations)
+{
+	int iteration = 0;
+	double x=x0;
+	while(iteration<max_iterations)
+	{
+		double fx=f(x);
+		double fx_prime = f_prime(x);
+		if(fabs(fx_prime <1e-10))
+		{
+			printf("Derivative too small , Newton-Raphson method failed. \n");
+			return x;
+		}
+		double x_new = x-fx/fx_prime;
+		if(fabs(x_new - x)< tolerance)
+		{
+			printf("coveraged to root after %d iterations.\n",iteration);
+			return x_new;
+		}
+		x=x_new;
+		iteration++;
+	}
+	printf("Method did not converge after %d iterations.\n",max_iterations);
+	return x;
+}
+
+int main()
+{
+	double initial_guess =1.0;
+	double tolerance = 1e-6;
+	int max_iterations=100;
+	
+	double root = newton_raphson(initial_guess,tolerance,max_iterations);
+	printf("Approximate root: %lf\n",root);
+	return 0;
+}
+	
