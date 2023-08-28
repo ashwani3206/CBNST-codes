@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+#define N 3  // Number of equations
+
+void gaussElimination(double mat[N][N + 1]) {
+    int i, j, k;
+    
+    for (i = 0; i < N; i++) {
+        for (j = i + 1; j < N; j++) {
+            double ratio = mat[j][i] / mat[i][i];
+            
+            for (k = 0; k <= N; k++) {
+                mat[j][k] -= ratio * mat[i][k];
+            }
+        }
+    }
+    
+    double sol[N];
+    for (i = N - 1; i >= 0; i--) {
+        sol[i] = mat[i][N];
+        for (j = i + 1; j < N; j++) {
+            sol[i] -= mat[i][j] * sol[j];
+        }
+        sol[i] /= mat[i][i];
+    }
+    
+    printf("Solution:\n");
+    for (i = 0; i < N; i++) {
+        printf("x%d = %lf\n", i + 1, sol[i]);
+    }
+}
+
+int main() {
+    double mat[N][N + 1];
+    
+    printf("Enter the coefficients and constants for each equation:\n");
+    for (int i = 0; i < N; i++) {
+        printf("Equation %d:\n", i + 1);
+        for (int j = 0; j <= N; j++) {
+            printf("Enter coefficient for x%d: ", j + 1);
+            scanf("%lf", &mat[i][j]);
+        }
+    }
+    
+    gaussElimination(mat);
+    
+    return 0;
+}
