@@ -1,0 +1,70 @@
+**Problem:** Suppose you are managing a budget for a small business and need to determine the costs associated with different types of expenses, such as rent, utilities, and employee salaries. You have collected data for a particular month and formulated a system of linear equations to represent the expenses. You want to use the Gauss elimination method to solve this system and determine the individual expenses.
+
+**System of Linear Equations:**
+
+Let's assume you have the following system of linear equations:
+
+```
+1.  Rent + Utilities + Salaries = 5000
+2.  Rent + 2 * Utilities + 3 * Salaries = 12000
+3.  2 * Rent + 3 * Utilities + 4 * Salaries = 22000
+```
+
+**Solution using Gauss Elimination in C:**
+
+Here's a C code example to solve the system of linear equations using the Gauss elimination method:
+
+```c
+#include <stdio.h>
+
+void gaussElimination(double A[3][4], int n) {
+    int i, j, k;
+    double factor, sum;
+    
+    for (i = 0; i < n - 1; i++) {
+        for (j = i + 1; j < n; j++) {
+            factor = A[j][i] / A[i][i];
+            
+            for (k = i; k < n + 1; k++) {
+                A[j][k] = A[j][k] - factor * A[i][k];
+            }
+        }
+    }
+
+    // Back substitution
+    double X[n];
+    for (i = n - 1; i >= 0; i--) {
+        sum = 0.0;
+        for (j = i + 1; j < n; j++) {
+            sum += A[i][j] * X[j];
+        }
+        X[i] = (A[i][n] - sum) / A[i][i];
+    }
+
+    printf("Solution:\n");
+    for (i = 0; i < n; i++) {
+        printf("Expense %d: $%.2lf\n", i + 1, X[i]);
+    }
+}
+
+int main() {
+    int n = 3; // Number of equations and variables
+    double A[3][4] = {
+        {1, 1, 1, 5000},
+        {1, 2, 3, 12000},
+        {2, 3, 4, 22000}
+    };
+
+    gaussElimination(A, n);
+
+    return 0;
+}
+```
+
+In this C code:
+
+- `gaussElimination` is a function that performs Gaussian elimination to solve the system of linear equations.
+- The `A` matrix represents the coefficients of the equations and the right-hand side values.
+- After solving the system, the code prints out the individual expenses for rent, utilities, and salaries.
+
+When you run this C program, it will calculate and display the expenses based on the given system of linear equations.
