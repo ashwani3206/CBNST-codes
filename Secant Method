@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <math.h>
+
+// Define the function whose root you want to find
+double f(double x) {
+    return x * x - 4; // Change this function as needed
+}
+
+int main() {
+    double x0, x1, epsilon, root;
+    
+    // Input the initial guesses (x0 and x1) and the desired precision (epsilon)
+    printf("Enter the initial guess x0: ");
+    scanf("%lf", &x0);
+    
+    printf("Enter the initial guess x1: ");
+    scanf("%lf", &x1);
+    
+    printf("Enter the desired precision (epsilon): ");
+    scanf("%lf", &epsilon);
+
+    // Secant method
+    while (fabs(f(x1)) >= epsilon) {
+        // Calculate the next approximation
+        root = x1 - (f(x1) * (x1 - x0)) / (f(x1) - f(x0));
+
+        // Update the values for the next iteration
+        x0 = x1;
+        x1 = root;
+    }
+
+    // Print the estimated root
+    printf("Estimated root: %lf\n", root);
+
+    return 0;
+}
