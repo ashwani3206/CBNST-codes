@@ -1,0 +1,71 @@
+**Problem:** Let's consider a real-life problem where you have a simple mathematical model to predict the growth of a population of a certain species over time. You want to estimate the population growth rate, and you have collected data for several years. The population data follows an exponential growth model:
+
+```
+P(t) = P0 * e^(r*t)
+```
+
+Where:
+- `P(t)` is the population size at time `t`.
+- `P0` is the initial population size at `t = 0`.
+- `r` is the population growth rate you want to estimate.
+- `t` is the time in years.
+
+You have historical data for the population sizes at various time points, and you want to use the Newton-Raphson method to estimate the population growth rate `r` based on this data.
+
+**Solution using Newton-Raphson in C:**
+
+Here's a C code example to estimate the population growth rate `r` using the Newton-Raphson method based on the population data:
+
+```c
+#include <stdio.h>
+#include <math.h>
+
+// Function to calculate the population size at time t using the exponential growth model
+double population(double P0, double r, double t) {
+    return P0 * exp(r * t);
+}
+
+// Function to calculate the derivative of the population function with respect to r
+double population_derivative(double P0, double r, double t) {
+    return P0 * t * exp(r * t);
+}
+
+// Newton-Raphson method to estimate the population growth rate r
+double newtonRaphson(double P0, double target_population, double initial_guess, double tolerance) {
+    double r = initial_guess;
+    
+    while (1) {
+        double current_population = population(P0, r, 1.0);  // Assuming data is for one year
+        
+        double error = current_population - target_population;
+        if (fabs(error) < tolerance) {
+            return r;
+        }
+        
+        // Update r using the Newton-Raphson formula
+        r = r - (current_population - target_population) / population_derivative(P0, r, 1.0);
+    }
+}
+
+int main() {
+    double P0 = 1000.0;         // Initial population at t = 0
+    double target_population = 2000.0;  // Target population at t = 1 year
+    double initial_guess = 0.1; // Initial guess for the growth rate
+    double tolerance = 1e-6;    // Tolerance for convergence
+
+    double estimated_growth_rate = newtonRaphson(P0, target_population, initial_guess, tolerance);
+
+    printf("Estimated Growth Rate (r): %.6lf\n", estimated_growth_rate);
+
+    return 0;
+}
+```
+
+In this C code:
+
+- The `population` function calculates the population size at a given time `t` based on the exponential growth model.
+- The `population_derivative` function calculates the derivative of the population function with respect to `r`.
+- The `newtonRaphson` function performs the Newton-Raphson iterations to estimate the growth rate `r`.
+- The main function initializes the problem parameters, such as the initial population, target population, initial guess for `r`, and tolerance for convergence. It then calls the `newtonRaphson` function to estimate the growth rate and prints the result.
+
+When you run this C program, it will estimate the population growth rate `r` based on the provided data and print the result.
