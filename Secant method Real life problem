@@ -1,0 +1,75 @@
+**Problem:** Imagine you are working as an engineer for a construction company, and you need to calculate the time it takes for a stone dropped from a certain height to hit the ground. You have collected data that suggests the stone's position, \(S(t)\), as a function of time, \(t\), can be modeled by the following equation:
+
+\[S(t) = h - \frac{1}{2} g t^2\]
+
+Where:
+- \(S(t)\) is the stone's position at time \(t\).
+- \(h\) is the initial height from which the stone is dropped.
+- \(g\) is the acceleration due to gravity (approximately 9.81 m/s²).
+
+You want to find the time, \(t\), at which the stone hits the ground. This corresponds to finding the root of the equation \(S(t) = 0\).
+
+**Solution using Secant Method in C:**
+
+Here's a C code example to find the time \(t\) when the stone hits the ground (i.e., \(S(t) = 0\)) using the secant method:
+
+```c
+#include <stdio.h>
+#include <math.h>
+
+// Define the function S(t) representing the stone's position
+double position_function(double h, double g, double t) {
+    return h - 0.5 * g * t * t;
+}
+
+// Implement the secant method to find the root of the equation S(t) = 0
+double secant_method(double h, double g, double x0, double x1, double tolerance) {
+    double x2, f0, f1, f2;
+    int max_iterations = 1000;
+    int iteration = 0;
+    
+    do {
+        f0 = position_function(h, g, x0);
+        f1 = position_function(h, g, x1);
+        
+        // Calculate the next approximation using the secant formula
+        x2 = x1 - (f1 * (x1 - x0)) / (f1 - f0);
+        
+        // Update values for the next iteration
+        x0 = x1;
+        x1 = x2;
+        
+        // Calculate the function value at the new approximation
+        f2 = position_function(h, g, x2);
+        
+        iteration++;
+        
+        if (fabs(f2) < tolerance || iteration >= max_iterations) {
+            // Root found or maximum iterations reached
+            return x2;
+        }
+    } while (1);
+}
+
+int main() {
+    double h = 100.0;         // Initial height (in meters)
+    double g = 9.81;          // Acceleration due to gravity (in m/s^2)
+    double x0 = 0.0;          // Initial guess 1 for time (in seconds)
+    double x1 = 10.0;         // Initial guess 2 for time (in seconds)
+    double tolerance = 1e-6; // Tolerance for convergence
+    
+    double time_to_ground = secant_method(h, g, x0, x1, tolerance);
+    
+    printf("Time to hit the ground: %.6lf seconds\n", time_to_ground);
+
+    return 0;
+}
+```
+
+In this C code:
+
+- `position_function(h, g, t)` defines the function \(S(t)\) representing the stone's position as a function of time \(t\).
+- `secant_method(h, g, x0, x1, tolerance)` implements the secant method to find the root of the equation \(S(t) = 0\).
+- The main function initializes the problem parameters, such as the initial height, acceleration due to gravity, initial guesses for time, and tolerance. It then calls the `secant_method` function to find the time when the stone hits the ground and prints the result.
+
+When you run this C program, it will estimate the time at which the stone hits the ground based on the provided parameters and the position function.
