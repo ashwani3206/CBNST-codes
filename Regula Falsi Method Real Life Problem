@@ -1,0 +1,77 @@
+**Problem:** Consider a scenario where a chemical reaction in a laboratory is producing a certain compound, and you want to determine the time it takes for the concentration of the compound to reach a specific level. The rate of change of concentration over time follows a mathematical function, and you need to find the time when the concentration reaches a certain threshold.
+
+**Mathematical Model:** Let's assume the concentration of the compound, C(t), at time t, follows an exponential decay model:
+
+```
+C(t) = C0 * e^(-kt)
+```
+
+Where:
+- `C(t)` is the concentration at time t.
+- `C0` is the initial concentration at `t = 0`.
+- `k` is the rate constant.
+- `t` is time.
+
+You want to find the value of `t` when `C(t)` reaches a certain threshold concentration, say `C_threshold`.
+
+**Solution using Regula Falsi in C:**
+
+Here's a C code example to find the time `t` when the concentration `C(t)` reaches a specific threshold `C_threshold` using the Regula Falsi method:
+
+```c
+#include <stdio.h>
+#include <math.h>
+
+// Define the function to find the root of (C(t) - C_threshold)
+double function(double C0, double k, double t, double C_threshold) {
+    return C0 * exp(-k * t) - C_threshold;
+}
+
+// Implement the Regula Falsi method
+double regulaFalsi(double C0, double k, double a, double b, double C_threshold, double tolerance) {
+    double c;
+    
+    while (1) {
+        // Calculate the values of the function at the endpoints and midpoint
+        double fa = function(C0, k, a, C_threshold);
+        double fb = function(C0, k, b, C_threshold);
+        c = (a * fb - b * fa) / (fb - fa);
+        
+        // Check if the solution is within the specified tolerance
+        if (fabs(b - a) < tolerance) {
+            return c;
+        }
+        
+        double fc = function(C0, k, c, C_threshold);
+        
+        if (fa * fc < 0) {
+            b = c;
+        } else {
+            a = c;
+        }
+    }
+}
+
+int main() {
+    double C0 = 100.0;          // Initial concentration at t = 0
+    double C_threshold = 10.0;  // Threshold concentration
+    double k = 0.05;            // Rate constant
+    double a = 0.0;             // Initial interval endpoint
+    double b = 10.0;            // Initial interval endpoint
+    double tolerance = 1e-6;    // Tolerance for convergence
+
+    double t = regulaFalsi(C0, k, a, b, C_threshold, tolerance);
+
+    printf("Time to reach %.2lf concentration: %.6lf seconds\n", C_threshold, t);
+
+    return 0;
+}
+```
+
+In this C code:
+
+- The `function` function calculates the difference between `C(t)` and `C_threshold`.
+- The `regulaFalsi` function implements the Regula Falsi method to find the time `t` when `C(t)` reaches `C_threshold`.
+- The main function initializes the problem parameters, such as the initial concentration, threshold concentration, rate constant, initial interval, and tolerance. It then calls the `regulaFalsi` function to find the time `t` and prints the result.
+
+When you run this C program, it will estimate the time `t` when the concentration reaches the specified threshold and print the result.
