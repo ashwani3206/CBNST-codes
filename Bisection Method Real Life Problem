@@ -1,0 +1,64 @@
+Problem: Suppose you are a software developer working for a company that manufactures and sells a product. 
+The company wants to determine the optimal selling price for the product to maximize their profit. 
+They have collected data and determined that the profit, P(x), in dollars, is a function of the selling price, x, in dollars, and is modeled by the following equation:
+P(x) = -0.5x^2 + 120x - 5000
+
+The company wants to find the selling price that maximizes their profit using the bisection method.
+
+Solution using Bisection Method in C:
+
+Here's a C code example to find the selling price that maximizes profit using the bisection method:
+#include <stdio.h>
+#include <math.h>
+
+// Define the profit function P(x)
+double profit_function(double x) {
+    return -0.5 * x * x + 120 * x - 5000;
+}
+
+// Bisection method to find the selling price that maximizes profit
+double bisection_maximize_profit(double a, double b, double tolerance) {
+    while ((b - a) >= tolerance) {
+        // Calculate the midpoint of the current interval
+        double c = (a + b) / 2.0;
+        
+        // Evaluate the profit function at the endpoints and midpoint
+        double fa = profit_function(a);
+        double fb = profit_function(b);
+        double fc = profit_function(c);
+        
+        if (fc == 0) {
+            // If the profit at the midpoint is very close to zero, we've found the maximum
+            return c;
+        } else if (fc * fa < 0) {
+            // Profit has different signs at c and a, so move b to c
+            b = c;
+        } else {
+            // Profit has different signs at c and b, so move a to c
+            a = c;
+        }
+    }
+    
+    // When the interval is sufficiently small, return the midpoint as the optimal selling price
+    return (a + b) / 2.0;
+}
+
+int main() {
+    double a = 0.0;      // Lower bound of the initial interval
+    double b = 200.0;    // Upper bound of the initial interval
+    double tolerance = 0.01;  // Tolerance for convergence
+    
+    double optimal_selling_price = bisection_maximize_profit(a, b, tolerance);
+    double max_profit = profit_function(optimal_selling_price);
+    
+    printf("Optimal Selling Price: $%.2lf\n", optimal_selling_price);
+    printf("Maximum Profit: $%.2lf\n", max_profit);
+    
+    return 0;
+}
+
+In this C code:
+
+profit_function(x) defines the profit function P(x) as given in the problem.
+bisection_maximize_profit(a, b, tolerance) is the bisection method implementation that iteratively narrows down the interval until the profit is maximized within the specified tolerance.
+The main function initializes the problem parameters, such as the initial interval and tolerance, and then calls the bisection_maximize_profit function to find the optimal selling price and maximum profit.
