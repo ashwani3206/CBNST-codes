@@ -1,0 +1,63 @@
+**Problem:** Imagine you are planning to build a rectangular garden in your backyard. You want to determine the dimensions of the garden such that its area is maximized while staying within a given perimeter. You have a fixed amount of fencing material to enclose the garden, which limits the perimeter. You need to find the dimensions that maximize the garden's area.
+
+**Mathematical Model:** Let's assume the length of the rectangular garden is \(L\) meters, and the width is \(W\) meters. The perimeter of the garden is given by:
+
+[P = 2L + 2W]
+
+And the area of the garden is given by:
+
+[A = L * W]
+
+You have a fixed perimeter \(P\) (e.g., 100 meters), and you want to find the values of \(L\) and \(W\) that maximize \(A\) (the area).
+
+**Solution using the Quadratic Formula in C:**
+
+Here's a C code example to find the dimensions \(L\) and \(W\) that maximize the garden's area using the quadratic formula:
+
+```c
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double P; // Perimeter of the garden
+    double L, W; // Length and width of the garden
+    double maxArea; // Maximum area of the garden
+    
+    // Input the perimeter P
+    printf("Enter the perimeter of the garden (in meters): ");
+    scanf("%lf", &P);
+    
+    // Calculate the dimensions L and W that maximize the area
+    L = P / 4.0; // Initialize L based on a square shape
+    W = P / 4.0; // Initialize W based on a square shape
+    maxArea = L * W; // Initialize maxArea based on the square shape
+    
+    // Check if a rectangle with different dimensions can yield a larger area
+    for (double potentialL = 1.0; potentialL <= P / 2.0; potentialL += 0.01) {
+        double potentialW = (P - 2 * potentialL) / 2.0;
+        double potentialArea = potentialL * potentialW;
+        if (potentialArea > maxArea) {
+            L = potentialL;
+            W = potentialW;
+            maxArea = potentialArea;
+        }
+    }
+    
+    // Output the dimensions and maximum area
+    printf("Dimensions that maximize area:\n");
+    printf("Length (L): %.2lf meters\n", L);
+    printf("Width (W): %.2lf meters\n", W);
+    printf("Maximum Area (A): %.2lf square meters\n", maxArea);
+    
+    return 0;
+}
+```
+
+In this C code:
+
+- The user is prompted to input the perimeter \(P\) of the garden.
+- The code initializes \(L\) and \(W\) based on a square shape, as this is one possible solution.
+- It then iterates through different potential lengths \(L\) to find the dimensions that maximize the area. The dimensions are updated when a larger area is found.
+- Finally, the code outputs the dimensions and maximum area.
+
+This program helps you determine the dimensions of a rectangular garden that maximize its area within a given perimeter.
