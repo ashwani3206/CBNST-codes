@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <math.h>
+
+// Define the function for which you want to find the root.
+double function(double x) {
+    return x * x - 4;  // Replace with your desired function
+}
+
+// Implement the Secant Method
+double secant(double x0, double x1, double epsilon, int max_iterations) {
+    int i;
+    double x2, f0, f1, f2;
+    
+    for (i = 0; i < max_iterations; i++) {
+        f0 = function(x0);
+        f1 = function(x1);
+        
+        x2 = x1 - (f1 * (x1 - x0)) / (f1 - f0);
+        f2 = function(x2);
+        
+        if (fabs(f2) < epsilon) {
+            printf("Root found after %d iterations.\n", i + 1);
+            return x2;
+        }
+        
+        x0 = x1;
+        x1 = x2;
+    }
+    
+    printf("Secant method did not converge after %d iterations.\n", max_iterations);
+    return 0.0; // Return 0 to indicate failure.
+}
+
+int main() {
+    double x0, x1, epsilon;
+    
+    printf("Enter two initial guesses (x0 and x1): ");
+    scanf("%lf %lf", &x0, &x1);
+
+    printf("Enter epsilon (accuracy) value: ");
+    scanf("%lf", &epsilon);
+
+    int max_iterations = 100; // Maximum number of iterations, adjust as needed.
+    
+    double root = secant(x0, x1, epsilon, max_iterations);
+    
+    if (root != 0.0) {
+        printf("Approximate root: %lf\n", root);
+    } else {
+        printf("Secant method failed to find a root.\n");
+    }
+    
+    return 0;
+}
